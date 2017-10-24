@@ -1,0 +1,8 @@
+{
+  "uid": 1,
+  "sender": "John Doe",
+  "subject": "Lorem ipsum dolor sit amet",
+  "message": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sodales at nisi vel tempus. Donec congue, lorem sit amet imperdiet venenatis, eros lacus elementum felis, sit amet tincidunt sapien velit nec metus. In in leo tellus.",
+  "time_sent": "1234567890",
+  "time_read": "1234567890"
+}

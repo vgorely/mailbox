@@ -1,0 +1,79 @@
+#%RAML 1.0
+
+title: Mailbox
+baseUri: http://mailbox.dev
+version: 1.0.0
+
+/status:
+  get:
+    description: Shows statuses of application dependencies
+    responses:
+      200:
+        body:
+          application/json:
+            type: !include status/response/type/status_200.json
+            example: !include status/response/example/status_200.json
+
+/messages:
+  get:
+    description: Returns a paginated list of messages
+    queryParameters:
+      offset:
+        type: "integer"
+        example: 0
+      limit:
+        type: "integer"
+        example: 10
+    responses:
+      200:
+        body:
+          application/json:
+            type: !include message/response/type/list_200.json
+            example: !include message/response/example/list_200.json
+
+  /archived:
+    get:
+      description: Returns a paginated list of archived messages
+      queryParameters:
+        offset:
+          type: "integer"
+          example: 0
+        limit:
+          type: "integer"
+          example: 10
+      responses:
+        200:
+          body:
+            application/json:
+              type: !include message/response/type/archived_list_200.json
+              example: !include message/response/example/archived_list_200.json
+
+  /{uid}:
+    uriParameters:
+      uid:
+        type: "integer"
+        example: 1
+    get:
+      description: Shows a message
+      responses:
+        200:
+          body:
+            application/json:
+              type: !include message/response/type/show_200.json
+              example: !include message/response/example/show_200.json
+        404:
+          description: The message was not found
+
+    /archive:
+      put:
+        description: Mark a message as archived
+        responses:
+          200:
+            description: The message was marked as archived
+
+    /read:
+      put:
+        description: Mark a message as read
+        responses:
+          200:
+            description: The message was marked as read

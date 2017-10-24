@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "type": "object",
+  "properties": {
+    "uid": {
+      "type": "integer"
+    },
+    "sender": {
+      "type": "string"
+    },
+    "subject": {
+      "type": "string"
+    },
+    "message": {
+      "type": "string"
+    },
+    "time_sent": {
+      "type": "string"
+    },
+    "time_read": {
+      "type": "string"
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "type": "object",
+  "properties": {
+    "offset": {
+      "type": "string",
+      "minimum": 0
+    },
+    "limit": {
+      "type": "string",
+      "minimum": 0,
+      "maximum": 100
+    }
+  },
+  "required": ["offset", "limit"]
+}

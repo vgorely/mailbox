@@ -1,0 +1,48 @@
+#!/usr/bin/env php
+<?php declare(strict_types = 1);
+
+require_once __DIR__ . '/../vendor/autoload.php';
+
+use Doctrine\DBAL\DriverManager;
+use Doctrine\DBAL\Migrations\Configuration\Configuration;
+use Doctrine\DBAL\Migrations\OutputWriter;
+use Doctrine\DBAL\Migrations\Tools\Console\Command as DoctrineMigrations;
+use Doctrine\DBAL\Migrations\Tools\Console\Helper\ConfigurationHelper;
+use Doctrine\DBAL\Tools\Console\Helper\ConnectionHelper;
+use Mailbox\Console\Command\Db;
+use Mailbox\Console\Command\Migration;
+use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Helper;
+use Symfony\Component\Console\Output\ConsoleOutput;
+
+$connection = DriverManager::getConnection([
+    'driver' => 'pdo_pgsql',
+    'url' => getenv('DB_DSN'),
+]);
+
+$output = new ConsoleOutput();
+$outputWriter = new OutputWriter(function($message) use ($output) {
+    return $output->writeln($message);
+});
+
+$configuration = new Configuration($connection, $outputWriter);
+$configuration->setName('Mailbox Migrations');
+$configuration->setMigrationsDirectory(__DIR__ . '/../src/Console/Migration');
+$configuration->setMigrationsNamespace('Mailbox\Console\Migration');
+$configuration->setMigrationsTableName('migrations');
+
+$app = new Application('Mailbox Console Application');
+$app->setCatchExceptions(true);
+$app->setHelperSet(
+    new Helper\HelperSet([
+        'db' => new ConnectionHelper($connection),
+        'dialog' => new Helper\QuestionHelper(),
+        'configuration' => new ConfigurationHelper($connection, $configuration),
+    ])
+);
+$app->addCommands([
+    new Db\ImportCommand(),
+    new Migration\GenerateCommand(),
+    new DoctrineMigrations\MigrateCommand(),
+]);
+$app->run();

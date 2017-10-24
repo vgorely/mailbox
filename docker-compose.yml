@@ -1,0 +1,35 @@
+version: "3"
+services:
+
+  #---------------------------------------------------------------------------------------------------------------------
+  # API
+  #---------------------------------------------------------------------------------------------------------------------
+
+  app:
+    container_name: mailbox-app
+    build: .
+    ports:
+      - "80:80"
+    volumes:
+      - .:/server/http
+    environment:
+      APP_DEBUG: "true"
+      DB_DSN: pgsql://mailbox:mailbox@pgsql/mailbox?sslmode=disable&client_encoding=UTF8
+    links:
+      - pgsql
+    depends_on:
+      - pgsql
+
+  #---------------------------------------------------------------------------------------------------------------------
+  # PostgreSQL
+  #---------------------------------------------------------------------------------------------------------------------
+
+  pgsql:
+    container_name: mailbox-pgsql
+    image: postgres:9.6
+    ports:
+      - "5432:5432"
+    environment:
+      LC_ALL: C.UTF-8
+      POSTGRES_PASSWORD: mailbox
+      POSTGRES_USER: mailbox
